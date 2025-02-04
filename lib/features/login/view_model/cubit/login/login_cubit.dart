@@ -1,11 +1,12 @@
 import 'package:auth_app/features/login/data/repositories/login_repo.dart';
+import 'package:auth_app/features/login/data/repositories/repo_impl.dart';
 import 'package:auth_app/features/login/view_model/cubit/login/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginCubit extends Cubit <LoginState>{
-  LoginCubit({required this.loginRepo})
+  LoginCubit(/* LoginRepoImplemention loginRepoImplemention, */ {required this.loginRepo})
       : super(InitialLogin());
   LoginRepo loginRepo;
   final formKey = GlobalKey<FormState>();

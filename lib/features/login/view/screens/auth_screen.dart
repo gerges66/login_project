@@ -1,5 +1,6 @@
 import 'package:auth_app/core/utils/api_service.dart';
 import 'package:auth_app/core/utils/constants.dart';
+import 'package:auth_app/core/widgets/dependency_injection.dart';
 import 'package:auth_app/features/home/view/home_view.dart';
 
 import 'package:auth_app/features/login/data/repositories/repo_impl.dart';
@@ -13,8 +14,6 @@ class AuthScreen extends StatelessWidget {
   AuthScreen({super.key});
   @override
   Widget build(BuildContext context) {
-
-
 //     return BlocProvider(
 //         create: (context) => LoginCubit(
 //               loginRepo: LoginRepoImplemention(ApiService(Dio())),
@@ -135,126 +134,130 @@ class AuthScreen extends StatelessWidget {
 //                 ),
 //               ),
 //             ));
-return BlocProvider<LoginCubit>(
-  create: (context) => LoginCubit(loginRepo: LoginRepoImplemention(ApiService(Dio()))),
-  child: 
-
-  Scaffold(
-    body: BlocConsumer<LoginCubit, LoginState>(
-      listener: (context, state) {
-        if (state is SuccessLogin) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Login success"),
-              duration: Duration(seconds: 1),
-              backgroundColor: Colors.cyanAccent,
-            ),
-          );
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomeView()),
-          );
-        } else if (state is FailureLogin) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Login Failure"),
-              duration: Duration(seconds: 1),
-              backgroundColor: Colors.cyanAccent,
-            ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Loading"),
-              duration: Duration(seconds: 1),
-              backgroundColor: Colors.cyanAccent,
-            ),
-          );
-        }
-      },
-      builder: (context, state) {
-        final c = context.read<LoginCubit>();
-        return SingleChildScrollView(
-          child: Form(
-            key: c.formKey,
-            child: Column(
-              children: [
-                SizedBox(height: 250),
-                Center(
-                  child: Text(
-                    "Login page",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-                  ),
+    return BlocProvider<LoginCubit>(
+      create: (context) => LoginCubit(
+        loginRepo: locator<LoginRepoImplemention>(), 
+                    //  locator<LoginRepoImplemention>(), // Positional argument
+   
+        // LoginRepoImplemention(
+        //   ApiService(
+        //     Dio(),
+        //   ),
+        // ),
+      ),
+      child: Scaffold(
+        body: BlocConsumer<LoginCubit, LoginState>(
+          listener: (context, state) {
+            if (state is SuccessLogin) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("Login success"),
+                  duration: Duration(seconds: 1),
+                  backgroundColor: Colors.cyanAccent,
                 ),
-                Image.asset(
-                  img,
-                  width: 140,
-                  height: 140,
+              );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomeView()),
+              );
+            } else if (state is FailureLogin) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("Login Failure"),
+                  duration: Duration(seconds: 1),
+                  backgroundColor: Colors.cyanAccent,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: TextFormField(
-                    controller: c.emailController,
-                    validator: (data) {
-                      if (data!.isEmpty) return 'Field is required';
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Email",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("Loading"),
+                  duration: Duration(seconds: 1),
+                  backgroundColor: Colors.cyanAccent,
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            final c = context.read<LoginCubit>();
+            return SingleChildScrollView(
+              child: Form(
+                key: c.formKey,
+                child: Column(
+                  children: [
+                    SizedBox(height: 250),
+                    Center(
+                      child: Text(
+                        "Login page",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.w600),
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(height: 12),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: TextFormField(
-                    controller: c.passwordController,
-                    validator: (data) {
-                      if (data!.isEmpty) return 'Field is required';
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Password",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                    Image.asset(
+                      img,
+                      width: 140,
+                      height: 140,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: TextFormField(
+                        controller: c.emailController,
+                        validator: (data) {
+                          if (data!.isEmpty) return 'Field is required';
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Email",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    SizedBox(height: 12),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: TextFormField(
+                        controller: c.passwordController,
+                        validator: (data) {
+                          if (data!.isEmpty) return 'Field is required';
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Password",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    c.isLoading == false
+                        ? CustomButton(c: c)
+                        : CircularProgressIndicator(),
+                  ],
                 ),
-                SizedBox(height: 12),
-                c.isLoading == false
-                    ? CustomButton(c: c)
-                    : CircularProgressIndicator(),
-              ],
-            ),
-          ),
-        );
-      },
-    ),
-  ),
-);
-
-
-
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }
-
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
@@ -283,7 +286,6 @@ class CustomButton extends StatelessWidget {
           //   c.loginUser();
           // }
           c.loginValidate();
-
         },
         child: Text(
           "Login",

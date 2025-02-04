@@ -1,7 +1,10 @@
+import 'package:auth_app/core/widgets/dependency_injection.dart';
 import 'package:auth_app/features/login/view/screens/auth_screen.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupLocator();
   runApp(const MyApp());
 }
 
